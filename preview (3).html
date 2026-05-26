@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Đề Thi Trắc Nghiệm - Right Endpoint</title>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async
+src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f7fb;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#003366,#1565c0);
+    color:white;
+    padding:40px;
+    text-align:center;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+
+.question{
+    background:white;
+    padding:25px;
+    margin-bottom:25px;
+    border-radius:15px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+.question h3{
+    margin-top:0;
+    color:#1565c0;
+}
+
+.option{
+    display:block;
+    width:100%;
+    padding:14px;
+    margin:10px 0;
+    border-radius:10px;
+    border:2px solid #ddd;
+    background:#fafafa;
+    cursor:pointer;
+    font-size:1rem;
+    text-align:left;
+}
+
+.option:hover{
+    background:#eef5ff;
+}
+
+.correct{
+    background:#d4edda !important;
+    border-color:#28a745 !important;
+}
+
+.wrong{
+    background:#f8d7da !important;
+    border-color:#dc3545 !important;
+}
+
+.answer{
+    margin-top:15px;
+    padding:15px;
+    background:#eef5ff;
+    border-left:5px solid #1565c0;
+    border-radius:10px;
+    display:none;
+}
+
+.tip{
+    margin-top:10px;
+    background:#fff8d9;
+    padding:12px;
+    border-left:5px solid #f4b400;
+    border-radius:10px;
+}
+
+.scoreboard{
+    position:sticky;
+    top:0;
+    background:white;
+    padding:15px;
+    z-index:1000;
+    border-bottom:3px solid #1565c0;
+    font-size:1.2rem;
+    font-weight:bold;
+    text-align:center;
+}
+
+.section-title{
+    background:#1565c0;
+    color:white;
+    padding:12px 20px;
+    border-radius:12px;
+    margin:30px 0 20px;
+    font-size:1.3rem;
+}
+
+footer{
+    background:#003366;
+    color:white;
+    padding:30px;
+    text-align:center;
+    margin-top:50px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>ĐỀ THI TRẮC NGHIỆM</h1>
+<h2>PHƯƠNG PHÁP RIGHT ENDPOINT</h2>
+<p>Tổng Riemann phải – Từ hình chữ nhật đến tích phân</p>
+</header>
+
+<div class="scoreboard">
+Điểm hiện tại:
+<span id="score">0</span> / 20
+</div>
+
+<div class="container" id="quiz"></div>
+
+<footer>
+<h2>Phương pháp Sư phạm DUYMT</h2>
+<p>Không học công thức — học cấu trúc tư duy phía sau công thức.</p>
+</footer>
+
+<script>
+
+const questions = [
+
+{
+type:"Lý thuyết",
+question:"Right Endpoint lấy chiều cao hình chữ nhật ở đâu?",
+options:[
+"Điểm đầu trái",
+"Điểm giữa",
+"Điểm cuối bên phải",
+"Điểm thấp nhất"
+],
+answer:2,
+explanation:"Right Endpoint dùng điểm cuối bên phải của mỗi đoạn để xác định chiều cao hình chữ nhật.",
+tip:"Right = phải → lấy điểm bên phải."
+},
+
+{
+type:"Lý thuyết",
+question:"Công thức tổng quát của Right Endpoint là gì?",
+options:[
+"\\(L_n=\\sum f(x_{i-1})\\Delta x\\)",
+"\\(R_n=\\sum f(x_i)\\Delta x\\)",
+"\\(M_n=\\sum f(m_i)\\Delta x\\)",
+"\\(\\int f(x)dx\\)"
+],
+answer:1,
+explanation:"Right Endpoint sử dụng các điểm phải \\(x_i\\).",
+tip:"Nhìn chữ R trong \\(R_n\\) → Right."
+},
+
+{
+type:"Lý thuyết",
+question:"Nếu hàm số tăng thì Right Endpoint thường:",
+options:[
+"Ước lượng thiếu",
+"Ước lượng đúng tuyệt đối",
+"Ước lượng dư",
+"Không xác định"
+],
+answer:2,
+explanation:"Hàm tăng → điểm phải cao hơn → hình chữ nhật cao hơn diện tích thật.",
+tip:"Hàm tăng + lấy bên phải = cao quá."
+},
+
+{
+type:"Lý thuyết",
+question:"\\(\\Delta x\\) là gì?",
+options:[
+"Độ cao hình chữ nhật",
+"Độ rộng mỗi đoạn con",
+"Đạo hàm",
+"Giới hạn"
+],
+answer:1,
+explanation:"\\(\\Delta x\\) là chiều rộng của mỗi đoạn chia.",
+tip:"Delta x = khoảng chia theo trục x."
+},
+
+{
+type:"Lý thuyết",
+question:"Khi \\(n \\to \\infty\\), tổng Right Endpoint tiến tới:",
+options:[
+"Đạo hàm",
+"Tích phân",
+"Ma trận",
+"Logarit"
+],
+answer:1,
+explanation:"Khi số hình chữ nhật tăng vô hạn, tổng Riemann tiến tới tích phân.",
+tip:"Riemann Sum → Integral."
+},
+
+{
+type:"Dễ",
+question:"Cho \\(f(x)=x\\) trên \\([0,2]\\), \\(n=2\\). Tính \\(\\Delta x\\).",
+options:[
+"0.5",
+"1",
+"2",
+"4"
+],
+answer:1,
+explanation:"\\(\\Delta x=(2-0)/2=1\\).",
+tip:"Lấy độ dài đoạn chia cho số khoảng."
+},
+
+{
+type:"Dễ",
+question:"Cho \\(f(x)=x\\), \\([0,2]\\), \\(n=2\\). Điểm phải đầu tiên là:",
+options:[
+"0",
+"0.5",
+"1",
+"2"
+],
+answer:2,
+explanation:"Các điểm chia: 0,1,2 nên điểm phải đầu tiên là 1.",
+tip:"Điểm phải của đoạn đầu."
+},
+
+{
+type:"Dễ",
+question:"\\(f(2)\\) với \\(f(x)=x^2\\) bằng:",
+options:[
+"2",
+"4",
+"6",
+"8"
+],
+answer:1,
+explanation:"\\(2^2=4\\).",
+tip:"Bình phương số 2."
+},
+
+{
+type:"Dễ",
+question:"Cho \\(f(x)=x\\), \\([0,2]\\), \\(n=2\\). Right Sum là:",
+options:[
+"1",
+"2",
+"3",
+"4"
+],
+answer:2,
+explanation:"\\(R_2=(1+2)\\times1=3\\).",
+tip:"Lấy giá trị tại điểm phải."
+},
+
+{
+type:"Dễ",
+question:"Nếu hàm giảm thì Right Endpoint thường:",
+options:[
+"Ước lượng dư",
+"Ước lượng thiếu",
+"Không đổi",
+"Âm"
+],
+answer:1,
+explanation:"Hàm giảm → điểm phải thấp hơn diện tích thật.",
+tip:"Hàm giảm → phải thấp."
+},
+
+{
+type:"Trung bình",
+question:"Cho \\(f(x)=x^2\\), \\([0,2]\\), \\(n=2\\). Tính Right Sum.",
+options:[
+"2",
+"5",
+"6",
+"8"
+],
+answer:1,
+explanation:"\\(\\Delta x=1\\), điểm phải: 1 và 2. \\(1^2+2^2=1+4=5\\).",
+tip:"Bình phương điểm phải."
+},
+
+{
+type:"Trung bình",
+question:"Cho \\(f(x)=2x\\), \\([0,3]\\), \\(n=3\\). Tính \\(R_3\\).",
+options:[
+"6",
+"9",
+"12",
+"18"
+],
+answer:2,
+explanation:"\\(\\Delta x=1\\). Điểm phải: 1,2,3. Tổng: 2+4+6=12.",
+tip:"Tính nhanh theo điểm phải."
+},
+
+{
+type:"Trung bình",
+question:"Cho \\(f(x)=x+1\\), \\([0,2]\\), \\(n=2\\). Tính \\(R_2\\).",
+options:[
+"3",
+"4",
+"5",
+"6"
+],
+answer:2,
+explanation:"Điểm phải: 1 và 2. Giá trị: 2 và 3. Tổng=5.",
+tip:"Cộng giá trị hàm tại điểm phải."
+},
+
+{
+type:"Trung bình",
+question:"Cho \\(f(x)=x^2\\), \\([0,1]\\), \\(n=4\\). \\(\\Delta x\\) bằng:",
+options:[
+"0.25",
+"0.5",
+"1",
+"4"
+],
+answer:0,
+explanation:"\\((1-0)/4=0.25\\).",
+tip:"Chiều dài đoạn chia cho số khoảng."
+},
+
+{
+type:"Trung bình",
+question:"Trong Right Endpoint, chiều cao hình chữ nhật thứ i là:",
+options:[
+"\\(f(x_{i-1})\\)",
+"\\(f(x_i)\\)",
+"\\(f(0)\\)",
+"\\(\\Delta x\\)"
+],
+answer:1,
+explanation:"Right Endpoint luôn dùng điểm phải.",
+tip:"Nhớ chữ Right."
+},
+
+{
+type:"Khó",
+question:"Cho \\(f(x)=x^2\\), \\([0,2]\\), \\(n=4\\). Tính \\(R_4\\).",
+options:[
+"2.75",
+"3.75",
+"4.75",
+"5.75"
+],
+answer:1,
+explanation:"\\(\\Delta x=0.5\\). Tổng = 0.5(0.25+1+2.25+4)=3.75.",
+tip:"Tính bình phương từng điểm phải."
+},
+
+{
+type:"Khó",
+question:"Cho \\(f(x)=3x\\), \\([0,4]\\), \\(n=4\\). Tính \\(R_4\\).",
+options:[
+"24",
+"30",
+"36",
+"40"
+],
+answer:1,
+explanation:"\\(\\Delta x=1\\). Điểm phải:1,2,3,4 → 3+6+9+12=30.",
+tip:"Hệ số 3 nhân tổng điểm phải."
+},
+
+{
+type:"Khó",
+question:"Cho \\(f(x)=x^2+1\\), \\([0,2]\\), \\(n=2\\). Tính \\(R_2\\).",
+options:[
+"5",
+"6",
+"7",
+"8"
+],
+answer:1,
+explanation:"Điểm phải:1 và 2 → giá trị:2 và 5 → tổng=7? Sai vì nhân \\(\\Delta x=1\\), nên 2+5=7.",
+tip:"Đừng quên cộng cả hằng số."
+},
+
+{
+type:"Khó",
+question:"Cho \\(f(x)=x^3\\), \\([0,2]\\), \\(n=2\\). Tính \\(R_2\\).",
+options:[
+"8",
+"9",
+"10",
+"12"
+],
+answer:1,
+explanation:"Điểm phải:1 và 2 → \\(1^3+2^3=1+8=9\\).",
+tip:"Lập phương điểm phải."
+},
+
+{
+type:"Khó",
+question:"Nếu tăng số hình chữ nhật thì sai số thường:",
+options:[
+"Tăng",
+"Không đổi",
+"Giảm",
+"Âm"
+],
+answer:2,
+explanation:"Chia càng nhỏ → xấp xỉ càng chính xác.",
+tip:"Nhiều hình hơn → gần đường cong hơn."
+}
+
+];
+
+const quiz=document.getElementById('quiz');
+
+let score=0;
+
+questions.forEach((q,index)=>{
+
+const div=document.createElement('div');
+div.className='question';
+
+div.innerHTML=`
+<h3>Câu ${index+1} — ${q.type}</h3>
+<p>${q.question}</p>
+`;
+
+q.options.forEach((opt,i)=>{
+
+const btn=document.createElement('button');
+
+btn.className='option';
+
+btn.innerHTML=opt;
+
+btn.onclick=()=>{
+
+if(div.dataset.done) return;
+
+div.dataset.done=true;
+
+const buttons=div.querySelectorAll('.option');
+
+buttons.forEach((b,j)=>{
+if(j===q.answer){
+b.classList.add('correct');
+}
+});
+
+if(i===q.answer){
+
+score++;
+
+}else{
+
+btn.classList.add('wrong');
+
+}
+
+document.getElementById('score').innerText=score;
+
+answer.style.display='block';
+
+MathJax.typesetPromise();
+
+};
+
+div.appendChild(btn);
+
+});
+
+const answer=document.createElement('div');
+
+answer.className='answer';
+
+answer.innerHTML=`
+<strong>Đáp án đúng:</strong> ${String.fromCharCode(65+q.answer)}
+<br><br>
+
+<strong>Giải thích:</strong>
+${q.explanation}
+
+<div class="tip">
+<strong>Mẹo làm nhanh:</strong>
+${q.tip}
+</div>
+`;
+
+div.appendChild(answer);
+
+quiz.appendChild(div);
+
+});
+
+</script>
+
+</body>
+</html>
